@@ -259,6 +259,103 @@ pressure.
 
 ---
 
+## The worksheet vs. startup discovery (Lean Startup, Customer Development, Business Model Canvas)
+
+Steve Blank's Customer Development and Eric Ries's Lean Startup are not merely
+*analogous* to the Brenner Method — they are the same epistemics specialized to
+the **Complex** Cynefin domain (markets are reflexive and emergent, with no
+stable grammar to deduce). They are an independent rediscovery of
+hypothesis-driven, kill-fast, cheapest-discriminating-test inquiry. Osterwalder's
+Business Model Canvas is a different kind of object — a representation, not a
+loop.
+
+### The isomorphism
+
+| Startup concept | Brenner operator / worksheet element | Note |
+|---|---|---|
+| **Leap-of-faith assumptions** (Ries) | `assumption_ledger` + ⊞ **Scale-Check** | The unit economics must *close* — the one place hard constraints bite even in a Complex domain |
+| **Riskiest-Assumption Test** (modern lean) | ✂ **Exclusion-Test** + ⚡ **Quickie** | "Test the assumption whose failure kills everything, first" is Brenner's "quickie that kills the key alternative" |
+| **MVP** (Ries) | ⚡ **Quickie** + 🔧 **DIY** + ⟂ **Object-Transpose** | The crude instrument good enough to *decide*, transposed to a cheap substrate (concierge / Wizard-of-Oz, not the real product) |
+| **Build–Measure–Learn** | the Brenner Loop itself | materialize → experiment → update-or-kill |
+| **Validated learning / actionable vs vanity metrics** | the rubric: **discriminative power over thoroughness** | Vanity metrics *are* the Occam's-broom anomalies — supportive data that prunes no alternative |
+| **Persevere or Pivot** | † **Theory-Kill** + pre-committed kill condition | "No business plan survives first contact with customers" = "don't fall in love with your theories" |
+| **"Get out of the building"** (Blank) | 👁 **HAL — Have A Look** | Near-verbatim Brenner: "what's the use of doing a lot of biochemistry when you can just *see*?" |
+| **Customer Dev ⊥ Product Dev** (Blank) | ⊘ **Level-Split** | Separate "is there a market" (signal) from "can we build it" (implementation) |
+| **Beginner's mind about the market** | ⊕ **Productive Ignorance** | Wide priors; the outsider/émigré advantage |
+| **Business Model Canvas** (Osterwalder) | 𝓛 **Recode** + ≡ **Invariant-Extract** | *Not a loop* — a coordinate system (see below) |
+
+### The Business Model Canvas is the Recode operator
+
+BMC (and the Value Proposition Canvas) is not a discovery *process*; it is a
+**coordinate system**. It is a pure **𝓛 Recode**: it reduces the
+high-dimensional mess of "a company" to 9 boxes — the *machine language of a
+business model* — on one searchable page, so you can *see which boxes are
+untested assumptions* rather than facts.
+
+> **BMC is the representation; Lean Startup / Customer Development are the loop you
+> run _over_ it to test each box.** Brenner would recognize BMC as the
+> dimensional-reduction step (3D→1D) that makes rival hypotheses disagree, and the
+> discovery loops as the materialize → exclusion → kill machinery applied to each
+> block.
+
+### Two honest divergences (the Complex-vs-Complicated boundary)
+
+1. **The entry point inverts.** Complicated Brenner starts from a **paradox** (two
+   true things that cannot coexist). Discovery starts from the **riskiest
+   leap-of-faith assumption** (one belief whose failure kills the venture). Both
+   converge on the same move — the cheapest test that could falsify it — but in a
+   Complex domain you rarely *have* a clean contradiction; you have irreducible
+   ignorance.
+2. **The grammar is non-stationary.** Brenner's first axiom assumes a *fixed*
+   generative grammar to reverse-engineer. Markets are **reflexive** — your
+   experiment changes customer behavior and competitors adapt, so the probe partly
+   *creates* the reality rather than only revealing it. And the target differs:
+   Brenner optimizes for **truth** (does this mechanism exist?), startups for a
+   **viable business** (profitable, repeatable, scalable). The *how-you-search* is
+   near-identical; the *what-you-search-for* is not.
+
+### Worked example: a startup hypothesis on the worksheet
+
+**Idea:** an AI tool that auto-drafts contract redlines for small-firm lawyers.
+
+- **Entry (riskiest assumption, not a paradox):** "Small-firm lawyers will pay for
+  redline automation."
+- **⊘ Level-Split → `hypothesis_slate`:**
+  - **H1** — real pain + willingness to pay (the edge is real).
+  - **H2** — they want it but will not pay (use free tools / do it themselves) —
+    *market/implementation failure*.
+  - **H3 (third alternative, orthogonal)** — the blocker is not *time*, it is
+    **malpractice/liability risk**: they will not trust AI redlines regardless of
+    quality. Different causal structure entirely.
+- **⊞ Scale-Check → `assumption_ledger`:** TAM (how many small firms),
+  willingness-to-pay vs. CAC — does LTV/CAC close? If the math fails even at 100%
+  conversion, kill before building.
+- **⟂ + ⚡ + 🔧 → `discriminative_tests`:** do not build the product. **Concierge
+  MVP** — manually redline 20 contracts for 10 firms and *charge* for it. **👁
+  HAL:** watch them actually use the output.
+- **✂ Forbidden patterns:** H1 → ≥ N/10 convert to a paid pilot. H2 → they love
+  the demo but will not sign. H3 → they cite *liability/trust*, not time, as the
+  reason. One probe discriminates all three.
+- **🎭 Potency check:** did you reach real buyers (partners with budget), not
+  associates who cannot sign? Otherwise a "no" is impotence, not chastity.
+- **† Pre-committed pivot rule:** if < 2/10 convert to paid, pivot — and H3's
+  signal tells you *where* (toward a liability-shielding / human-in-the-loop
+  framing).
+
+Same passes, same gates, same artifact as the other examples — only now the
+exclusion test is an empirical probe rather than a deduction, because the domain
+is Complex.
+
+### Synthesis
+
+**Lean Startup and Customer Development are the Brenner Loop's Complex-domain
+dialect; the Business Model Canvas is its Recode operator.** That the method and
+these frameworks are independent rediscoveries of the same kill-fast,
+cheapest-discriminating-test epistemics is itself evidence the distillation
+captured something real and portable.
+
+---
+
 *Derived from `specs/operator_library_v0.1.md`,
 `specs/evaluation_rubric_v0.1.md`, and the three method distillations in the repo
 root.*
