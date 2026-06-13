@@ -259,6 +259,115 @@ pressure.
 
 ---
 
+## The worksheet across Cynefin domains
+
+The Brenner Method is **not** domain-neutral. It is calibrated for one Cynefin
+domain — **Complicated** — and its own Failure Modes section says so ("When the
+Grammar Is Intractably Complex… the method may not converge"). What is useful is
+that the operators *degrade gracefully*: as you move out of the home domain, some
+survive and some must be dropped. Reaching for the full deductive loop everywhere
+is itself the misuse to avoid.
+
+### 1. Clear / Obvious — *sense → categorize → respond*
+
+Cause-and-effect is self-evident; the answer is a known best practice.
+
+**Example:** every API call returns `401` right after a deploy. Categorize
+(misconfigured/expired token), respond (fix config). Done.
+
+**Fit — mostly overkill.** No paradox, no rival grammars; running the loop is a
+category error (like reaching for statistics when seven-cycle log paper would
+do). Only **👁 HAL** (just look at the logs) and **🎭 Potency** (is auth really
+broken, or did the client drop its token — *won't* vs *can't*) earn their keep.
+The one move that matters is defensive: **ΔE Exception-Quarantine** as a
+tripwire — when a "best practice" stops working and the anomaly *won't fit the
+category*, you have fallen off Cynefin's cliff into Complex or Chaotic and now
+need the real loop.
+
+### 2. Complicated — *sense → analyze → respond*
+
+Knowable cause-and-effect that takes expertise. **Brenner's home turf — all 17
+operators fire.**
+
+**Example:** manufacturing yield drops 8% after switching solder suppliers,
+though every lot is spec-compliant. Paradox (**◊**), level-split (**⊘**: material
+spec vs. process interaction), recode + scale-check the reflow temps (**𝓛, ⊞**),
+forbidden-pattern test (**✂**: if it's the solder, yield tracks lot ID; if it's
+the oven, it tracks line), transpose to a cheap coupon board (**⟂**),
+pre-committed kill.
+
+**Fit — total.** The entire worksheet is a Complicated-domain instrument for
+converting known-unknowns into knowns by analysis. Both worked examples above
+live here.
+
+### 3. Complex — *probe → sense → respond*
+
+Many interacting agents; cause-and-effect is visible only in retrospect;
+intervening changes the system. No stable grammar to reverse-engineer.
+
+**Example:** "retention is falling and we don't know why." You cannot deduce it —
+you run safe-to-fail experiments (change onboarding for one team, on-call for
+another), amplify what helps, dampen what hurts, let the explanation emerge.
+
+**Fit — partial (Failure Mode #1).** The *deductive* operators weaken: you cannot
+derive clean forbidden patterns (**✂**) from an emergent system, and the single
+killer test gives way to *parallel* probes. But the *exploratory* operators port
+well — **⚡ Quickie** and **🔧 DIY** are exactly safe-to-fail probes, **⊕
+Productive Ignorance** and **∿ Dephase** keep priors wide, the **"Don't Worry"
+hypothesis** lets you proceed despite irreducible unknowns, and **⊞ Scale-Check /
+≡ Invariants** still bite because even complex systems obey constraints. The
+adaptation: run probes in parallel, accept retrospective coherence instead of
+predictive forbidden-patterns.
+
+### 4. Chaotic — *act → sense → respond*
+
+No discernible cause-and-effect; the goal is to stabilize and convert the problem
+to Complex/Complicated.
+
+**Example:** production is down, live data corrupting, root cause unknown. You do
+not reverse-engineer a grammar mid-fire — you act (fail over, cut traffic, freeze
+writes).
+
+**Fit — mostly suspended.** Brenner is an *inquiry* method; Chaos needs an
+*action* method (incident command). Only **👁 HAL** (look now) and **🔧
+DIY/Bricolage** (the crude stopgap — genuinely Brennerian) survive. The full loop
+is a **post-incident** activity: once stabilized, run paradox-hunt →
+exclusion-test → scale-check on the post-mortem to find the generative cause, the
+move that drags the problem back into Complicated where Brenner shines.
+
+### 5. Disorder / Confusion — *the center: you don't yet know which domain you're in*
+
+The danger is defaulting to your favorite domain's tools regardless of fit.
+
+**Example:** an exec says "engagement is bad — fix it." Config bug (Clear)?
+Analyzable funnel (Complicated)? Emergent shift (Complex)? Active crisis
+(Chaotic)? Unknown.
+
+**Fit — the opening passes _are_ the triage.** Forcing the problem into a
+decidable paradox (**◊**) and splitting levels (**⊘**) is the act that reveals
+the domain: *Can I write a clean forbidden-pattern test?* → Complicated, run the
+loop. *No stable grammar?* → Complex, switch to safe-to-fail probes. *Is it on
+fire?* → Chaotic, act. The meta-lesson matches the repo's Failure Modes: do not
+run the full deductive loop everywhere.
+
+### Summary: which operators survive per domain
+
+| Cynefin domain | Decision loop | Operator subset that applies | Verdict |
+|---|---|---|---|
+| **Clear** | sense→categorize→respond | 👁 HAL, 🎭 Potency, ΔE (as tripwire) | Loop is overkill; use a checklist |
+| **Complicated** | sense→analyze→respond | **All 17** | Brenner's home; full worksheet |
+| **Complex** | probe→sense→respond | ⚡ ⊕ ∿ 🔧 ↑ ⊞ ≡, "Don't Worry"; ✂ weakens | Parallel safe-to-fail, not one killer test |
+| **Chaotic** | act→sense→respond | 👁 🔧 only; rest deferred | Act first; loop is the post-mortem |
+| **Disorder** | (find out) | ◊ + ⊘ as triage | Opening passes sort you into a domain |
+
+The throughline: **Brenner is a Complicated-domain engine.** Its probe-operators
+(⚡🔧↑) survive into Complex, its look-and-build operators (👁🔧) survive into
+Chaotic, and its opening paradox + level-split doubles as Cynefin
+domain-detection in Disorder. Forcing the deductive core onto Complex or Chaotic
+problems is precisely the misuse the repo's Failure Modes warns about.
+
+---
+
 *Derived from `specs/operator_library_v0.1.md`,
 `specs/evaluation_rubric_v0.1.md`, and the three method distillations in the repo
 root.*
