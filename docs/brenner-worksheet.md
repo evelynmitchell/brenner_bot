@@ -396,100 +396,112 @@ pressure.
 
 ---
 
-## The worksheet vs. startup discovery (Lean Startup, Customer Development, Business Model Canvas)
+## The worksheet across Cynefin domains
 
-Steve Blank's Customer Development and Eric Ries's Lean Startup are not merely
-*analogous* to the Brenner Method — they are the same epistemics specialized to
-the **Complex** Cynefin domain (markets are reflexive and emergent, with no
-stable grammar to deduce). They are an independent rediscovery of
-hypothesis-driven, kill-fast, cheapest-discriminating-test inquiry. Osterwalder's
-Business Model Canvas is a different kind of object — a representation, not a
-loop.
+The Brenner Method is **not** domain-neutral. It is calibrated for one Cynefin
+domain — **Complicated** — and its own Failure Modes section says so ("When the
+Grammar Is Intractably Complex… the method may not converge"). What is useful is
+that the operators *degrade gracefully*: as you move out of the home domain, some
+survive and some must be dropped. Reaching for the full deductive loop everywhere
+is itself the misuse to avoid.
 
-### The isomorphism
+### 1. Clear / Obvious — *sense → categorize → respond*
 
-| Startup concept | Brenner operator / worksheet element | Note |
-|---|---|---|
-| **Leap-of-faith assumptions** (Ries) | `assumption_ledger` + ⊞ **Scale-Check** | The unit economics must *close* — the one place hard constraints bite even in a Complex domain |
-| **Riskiest-Assumption Test** (modern lean) | ✂ **Exclusion-Test** + ⚡ **Quickie** | "Test the assumption whose failure kills everything, first" is Brenner's "quickie that kills the key alternative" |
-| **MVP** (Ries) | ⚡ **Quickie** + 🔧 **DIY** + ⟂ **Object-Transpose** | The crude instrument good enough to *decide*, transposed to a cheap substrate (concierge / Wizard-of-Oz, not the real product) |
-| **Build–Measure–Learn** | the Brenner Loop itself | materialize → experiment → update-or-kill |
-| **Validated learning / actionable vs vanity metrics** | the rubric: **discriminative power over thoroughness** | Vanity metrics *are* the Occam's-broom anomalies — supportive data that prunes no alternative |
-| **Persevere or Pivot** | † **Theory-Kill** + pre-committed kill condition | "No business plan survives first contact with customers" = "don't fall in love with your theories" |
-| **"Get out of the building"** (Blank) | 👁 **HAL — Have A Look** | Near-verbatim Brenner: "what's the use of doing a lot of biochemistry when you can just *see*?" |
-| **Customer Dev ⊥ Product Dev** (Blank) | ⊘ **Level-Split** | Separate "is there a market" (signal) from "can we build it" (implementation) |
-| **Beginner's mind about the market** | ⊕ **Productive Ignorance** | Wide priors; the outsider/émigré advantage |
-| **Business Model Canvas** (Osterwalder) | 𝓛 **Recode** + ≡ **Invariant-Extract** | *Not a loop* — a coordinate system (see below) |
+Cause-and-effect is self-evident; the answer is a known best practice.
 
-### The Business Model Canvas is the Recode operator
+**Example:** every API call returns `401` right after a deploy. Categorize
+(misconfigured/expired token), respond (fix config). Done.
 
-BMC (and the Value Proposition Canvas) is not a discovery *process*; it is a
-**coordinate system**. It is a pure **𝓛 Recode**: it reduces the
-high-dimensional mess of "a company" to 9 boxes — the *machine language of a
-business model* — on one searchable page, so you can *see which boxes are
-untested assumptions* rather than facts.
+**Fit — mostly overkill.** No paradox, no rival grammars; running the loop is a
+category error (like reaching for statistics when seven-cycle log paper would
+do). Only **👁 HAL** (just look at the logs) and **🎭 Potency** (is auth really
+broken, or did the client drop its token — *won't* vs *can't*) earn their keep.
+The one move that matters is defensive: **ΔE Exception-Quarantine** as a
+tripwire — when a "best practice" stops working and the anomaly *won't fit the
+category*, you have fallen off Cynefin's cliff into Complex or Chaotic and now
+need the real loop.
 
-> **BMC is the representation; Lean Startup / Customer Development are the loop you
-> run _over_ it to test each box.** Brenner would recognize BMC as the
-> dimensional-reduction step (3D→1D) that makes rival hypotheses disagree, and the
-> discovery loops as the materialize → exclusion → kill machinery applied to each
-> block.
+### 2. Complicated — *sense → analyze → respond*
 
-### Two honest divergences (the Complex-vs-Complicated boundary)
+Knowable cause-and-effect that takes expertise. **Brenner's home turf — all 17
+operators fire.**
 
-1. **The entry point inverts.** Complicated Brenner starts from a **paradox** (two
-   true things that cannot coexist). Discovery starts from the **riskiest
-   leap-of-faith assumption** (one belief whose failure kills the venture). Both
-   converge on the same move — the cheapest test that could falsify it — but in a
-   Complex domain you rarely *have* a clean contradiction; you have irreducible
-   ignorance.
-2. **The grammar is non-stationary.** Brenner's first axiom assumes a *fixed*
-   generative grammar to reverse-engineer. Markets are **reflexive** — your
-   experiment changes customer behavior and competitors adapt, so the probe partly
-   *creates* the reality rather than only revealing it. And the target differs:
-   Brenner optimizes for **truth** (does this mechanism exist?), startups for a
-   **viable business** (profitable, repeatable, scalable). The *how-you-search* is
-   near-identical; the *what-you-search-for* is not.
+**Example:** manufacturing yield drops 8% after switching solder suppliers,
+though every lot is spec-compliant. Paradox (**◊**), level-split (**⊘**: material
+spec vs. process interaction), recode + scale-check the reflow temps (**𝓛, ⊞**),
+forbidden-pattern test (**✂**: if it's the solder, yield tracks lot ID; if it's
+the oven, it tracks line), transpose to a cheap coupon board (**⟂**),
+pre-committed kill.
 
-### Worked example: a startup hypothesis on the worksheet
+**Fit — total.** The entire worksheet is a Complicated-domain instrument for
+converting known-unknowns into knowns by analysis. Both worked examples above
+live here.
 
-**Idea:** an AI tool that auto-drafts contract redlines for small-firm lawyers.
+### 3. Complex — *probe → sense → respond*
 
-- **Entry (riskiest assumption, not a paradox):** "Small-firm lawyers will pay for
-  redline automation."
-- **⊘ Level-Split → `hypothesis_slate`:**
-  - **H1** — real pain + willingness to pay (the edge is real).
-  - **H2** — they want it but will not pay (use free tools / do it themselves) —
-    *market/implementation failure*.
-  - **H3 (third alternative, orthogonal)** — the blocker is not *time*, it is
-    **malpractice/liability risk**: they will not trust AI redlines regardless of
-    quality. Different causal structure entirely.
-- **⊞ Scale-Check → `assumption_ledger`:** TAM (how many small firms),
-  willingness-to-pay vs. CAC — does LTV/CAC close? If the math fails even at 100%
-  conversion, kill before building.
-- **⟂ + ⚡ + 🔧 → `discriminative_tests`:** do not build the product. **Concierge
-  MVP** — manually redline 20 contracts for 10 firms and *charge* for it. **👁
-  HAL:** watch them actually use the output.
-- **✂ Forbidden patterns:** H1 → ≥ N/10 convert to a paid pilot. H2 → they love
-  the demo but will not sign. H3 → they cite *liability/trust*, not time, as the
-  reason. One probe discriminates all three.
-- **🎭 Potency check:** did you reach real buyers (partners with budget), not
-  associates who cannot sign? Otherwise a "no" is impotence, not chastity.
-- **† Pre-committed pivot rule:** if < 2/10 convert to paid, pivot — and H3's
-  signal tells you *where* (toward a liability-shielding / human-in-the-loop
-  framing).
+Many interacting agents; cause-and-effect is visible only in retrospect;
+intervening changes the system. No stable grammar to reverse-engineer.
 
-Same passes, same gates, same artifact as the other examples — only now the
-exclusion test is an empirical probe rather than a deduction, because the domain
-is Complex.
+**Example:** "retention is falling and we don't know why." You cannot deduce it —
+you run safe-to-fail experiments (change onboarding for one team, on-call for
+another), amplify what helps, dampen what hurts, let the explanation emerge.
 
-### Synthesis
+**Fit — partial (Failure Mode #1).** The *deductive* operators weaken: you cannot
+derive clean forbidden patterns (**✂**) from an emergent system, and the single
+killer test gives way to *parallel* probes. But the *exploratory* operators port
+well — **⚡ Quickie** and **🔧 DIY** are exactly safe-to-fail probes, **⊕
+Productive Ignorance** and **∿ Dephase** keep priors wide, the **"Don't Worry"
+hypothesis** lets you proceed despite irreducible unknowns, and **⊞ Scale-Check /
+≡ Invariants** still bite because even complex systems obey constraints. The
+adaptation: run probes in parallel, accept retrospective coherence instead of
+predictive forbidden-patterns.
 
-**Lean Startup and Customer Development are the Brenner Loop's Complex-domain
-dialect; the Business Model Canvas is its Recode operator.** That the method and
-these frameworks are independent rediscoveries of the same kill-fast,
-cheapest-discriminating-test epistemics is itself evidence the distillation
-captured something real and portable.
+### 4. Chaotic — *act → sense → respond*
+
+No discernible cause-and-effect; the goal is to stabilize and convert the problem
+to Complex/Complicated.
+
+**Example:** production is down, live data corrupting, root cause unknown. You do
+not reverse-engineer a grammar mid-fire — you act (fail over, cut traffic, freeze
+writes).
+
+**Fit — mostly suspended.** Brenner is an *inquiry* method; Chaos needs an
+*action* method (incident command). Only **👁 HAL** (look now) and **🔧
+DIY/Bricolage** (the crude stopgap — genuinely Brennerian) survive. The full loop
+is a **post-incident** activity: once stabilized, run paradox-hunt →
+exclusion-test → scale-check on the post-mortem to find the generative cause, the
+move that drags the problem back into Complicated where Brenner shines.
+
+### 5. Disorder / Confusion — *the center: you don't yet know which domain you're in*
+
+The danger is defaulting to your favorite domain's tools regardless of fit.
+
+**Example:** an exec says "engagement is bad — fix it." Config bug (Clear)?
+Analyzable funnel (Complicated)? Emergent shift (Complex)? Active crisis
+(Chaotic)? Unknown.
+
+**Fit — the opening passes _are_ the triage.** Forcing the problem into a
+decidable paradox (**◊**) and splitting levels (**⊘**) is the act that reveals
+the domain: *Can I write a clean forbidden-pattern test?* → Complicated, run the
+loop. *No stable grammar?* → Complex, switch to safe-to-fail probes. *Is it on
+fire?* → Chaotic, act. The meta-lesson matches the repo's Failure Modes: do not
+run the full deductive loop everywhere.
+
+### Summary: which operators survive per domain
+
+| Cynefin domain | Decision loop | Operator subset that applies | Verdict |
+|---|---|---|---|
+| **Clear** | sense→categorize→respond | 👁 HAL, 🎭 Potency, ΔE (as tripwire) | Loop is overkill; use a checklist |
+| **Complicated** | sense→analyze→respond | **All 17** | Brenner's home; full worksheet |
+| **Complex** | probe→sense→respond | ⚡ ⊕ ∿ 🔧 ↑ ⊞ ≡, "Don't Worry"; ✂ weakens | Parallel safe-to-fail, not one killer test |
+| **Chaotic** | act→sense→respond | 👁 🔧 only; rest deferred | Act first; loop is the post-mortem |
+| **Disorder** | (find out) | ◊ + ⊘ as triage | Opening passes sort you into a domain |
+
+The throughline: **Brenner is a Complicated-domain engine.** Its probe-operators
+(⚡🔧↑) survive into Complex, its look-and-build operators (👁🔧) survive into
+Chaotic, and its opening paradox + level-split doubles as Cynefin
+domain-detection in Disorder. Forcing the deductive core onto Complex or Chaotic
+problems is precisely the misuse the repo's Failure Modes warns about.
 
 ---
 
