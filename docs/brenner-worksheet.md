@@ -79,7 +79,13 @@ A contribution that fails these is rejected (from the rubric):
 
 ---
 
-## Worked example: a 0DTE SPX option-selling strategy
+## Worked examples
+
+The same passes, gates, and artifact sections run unchanged across domains; only
+the substrate changes. That portability is the whole claim of the method. Two
+runs follow — one financial, one in distributed systems.
+
+## Worked example 1: a 0DTE SPX option-selling strategy
 
 ### Pass 0 — ◊ Paradox-Hunt → `research_thread`
 
@@ -210,6 +216,137 @@ like an insurer: reserve against the tail and size so one Aug-5 day cannot end
 the book,"* a completely different decision than "I found a Sharpe-2.5 edge."
 That reframing — from **alpha** to **priced insurance** — is the Brenner payoff:
 you changed the representation until the truth became cheap to see.
+
+---
+
+## Worked example 2: "we added servers and it got *slower*"
+
+A non-financial run, to show the loop is substrate-independent. It leans on the
+operators the trading example barely used — Scale-Check, Object-Transpose, HAL.
+
+### Pass 0 — ◊ Paradox-Hunt → `research_thread`
+
+> "We doubled the worker fleet to handle rising load — **yet** p99 latency got
+> *worse* and total throughput *dropped*. More capacity cannot make a system
+> slower. Both cannot be true."
+
+Decidable question: *Is the slowdown caused by real contention on a shared
+resource, a measurement/routing artifact, or a coordination feedback loop that
+more workers amplify?*
+
+### Pass 1–2 — ⊘ Level-Split + 𝓛 Recode → `hypothesis_slate`
+
+The level confusion: conflating **capacity** (signal — "more workers = more
+compute") with **coordination** (implementation — what those workers contend
+on). And conflating *can't* (a structural ceiling) with *won't* (a config knob).
+
+**Recode to machine language:** stop staring at the aggregate latency graph
+(high-D, path-dependent). Decompose each request into the primitives the system
+actually computes in — a **span timeline**:
+
+```
+total = queue_wait + service_time + downstream_wait + retry_overhead
+```
+
+per hop. That is the 1-D representation where the rivals disagree.
+
+| H | Level type | Claim |
+|---|-----------|-------|
+| **H1 — Shared-resource contention** | signal/structural | A downstream bottleneck (DB connection pool, lock, single partition) saturates; extra workers just pile up waiting. More workers → more contention. |
+| **H2 — Routing/measurement artifact** | implementation | Load balancer is not spreading evenly (sticky sessions, stale DNS), or the p99 metric is mis-aggregated across heterogeneous fleets. Nothing is actually slower. |
+| **H3 — Metastable feedback loop (third alternative)** | *orthogonal* | Not a capacity problem at all. A retry/timeout storm: slow responses trigger client retries, which add load, which slows responses further. More workers *accept* more doomed work and **amplify** the loop. (Imported via ⊕ Cross-Domain from control theory: positive feedback past a stability threshold.) |
+
+H3 is orthogonal: it agrees the slowdown is real (vs H2) but denies adding
+capacity could ever fix it (vs H1, where a bigger downstream would).
+
+### Pass 3 — ⊞ Scale-Check → `assumption_ledger` (kills theories for free)
+
+- DB `max_connections = 500`. Each worker holds a pool of `20`. At 25 workers
+  that is `500` — exactly tapped. **Double to 50 workers → 1000 requested against
+  a 500 ceiling.** `scale_check: true` — you have *starved the database*, and the
+  symptom is workers blocking on connection acquisition. This alone makes H1 the
+  front-runner before any experiment.
+- **Little's Law** invariant: `L = lambda * W`. If concurrency-in-flight `L` is
+  pinned by the pool ceiling while arrival rate `lambda` rises, wait time `W` must
+  blow up. Pure arithmetic.
+
+### Pass 4–5 — ≡ Invariant + ⌂ Materialize → `predictions_table`
+
+**Invariant (model-independent):** the **Universal Scalability Law** — throughput
+does not just plateau under contention/coherency cost, it can *retrograde*
+(decrease) as you add nodes. So "more workers → less throughput" is not
+paradoxical; it is the *expected* signature of a coherency-bound system. The
+paradox dissolves once you are in the right coordinates.
+
+| H | Materialized observable |
+|---|-------------------------|
+| H1 | `downstream_wait` (connection-acquire time) dominates slow spans; DB active-connection metric flat at its ceiling |
+| H2 | Per-worker request counts are wildly uneven; slow spans concentrate on a subset of nodes; a correctly-aggregated metric shows no regression |
+| H3 | `retry_overhead` and request *rate* spike together; queue depths **oscillate**; goodput (successful work) collapses while total work rises |
+
+### Pass 6–7 — ✂ Exclusion-Test + ⟂ Object-Transpose → `discriminative_tests`
+
+**Forbidden patterns:**
+
+- H1 forbidden if slow spans show negligible `downstream_wait`.
+- H2 forbidden if load is provably even *and* the regression persists per-node.
+- H3 forbidden if retry counts are flat while latency climbs.
+
+**⟂ Transpose the test object** — do not diagnose in prod under live traffic
+(slow, risky, ambiguous). The cheap discriminating substrate is a **load-test
+harness replaying captured traffic at controlled concurrency** against one
+representative endpoint.
+
+> **Killer test:** pull a distributed trace on 50 of the slowest requests and
+> read where the time goes. One look classifies all three: `downstream_wait` →
+> H1; node-skew → H2; `retry_overhead` + oscillation → H3.
+
+### Pass 8–10 — ↑ Amplify / 👁 HAL / 🔧 DIY / ⚡ Quickie / 🎭 Potency
+
+- **↑ Amplify + digital readout:** sweep worker count and make the readout binary
+  — *does adding one worker raise or lower throughput?* If it **lowers** it, you
+  are past the USL peak (H1/H3), not under-provisioned. Seven-cycle-log-paper
+  logic: you will not need statistics to see it.
+- **👁 HAL:** before any fancy analysis, *just open one slow trace.* The flame
+  graph usually ends the investigation.
+- **🔧 DIY + ⚡ Quickie:** do not re-architect yet. Cheapest pilot — **halve the
+  fleet** and watch p99. If p99 *improves* when you remove workers, that is
+  near-proof of contention/feedback (H1/H3) and instantly **kills H2**. Five
+  minutes, reversible.
+- **🎭 Potency check (chastity vs impotence):** is your load generator actually
+  saturating the system, or is *it* the bottleneck? Positive control: hit a
+  static `/healthz` on the same fleet. If even *that* degrades as you add workers,
+  the problem is infra (LB/network), not your app — you would be debugging the
+  wrong subsystem.
+
+### Pass 11 — ΔE / † / ∿ → `anomaly_register`, kill condition, `adversarial_critique`
+
+- **ΔE Quarantine:** do the slow spans **cluster** on one dependency (→ H1, a
+  specific pool) or **scatter** with retries (→ H3)? Clustering localizes the
+  bottleneck.
+- **† Pre-committed kill condition:** "Kill H2 ('artifact') if halving the fleet
+  improves p99 *and* per-node request counts are within 10% of even. Kill H1
+  ('pure capacity') if raising the DB connection ceiling does **not** restore
+  throughput — that promotes H3."
+- **∿ Dephase:** the reflexive fix everyone reaches for is "add more workers /
+  autoscale." That is exactly the move that *feeds* H1 and H3. The neglected angle
+  is **reducing** concurrency (smaller pools, load-shedding, retry budgets with
+  jitter).
+- **adversarial_critique:** "You assumed the fleet is the independent variable.
+  But you doubled workers right as organic traffic rose — you may be attributing a
+  load-driven regression to the deploy. Separate the two before celebrating any
+  fix."
+
+### Verdict
+
+The worksheet drives a **reclassification**, not a "buy more servers": with the
+connection-pool arithmetic and a single trace, this is overwhelmingly **H1
+contention, at risk of tipping into H3** if retries are not budgeted. The
+actionable output is the *opposite* of the instinctive one — **cap concurrency
+and add a retry budget**, do not add workers. Same Brenner payoff as example 1:
+you changed the representation (aggregate graph → span machine language;
+"capacity" → USL coherency cost) until the truth became cheap to see, and the
+paradox evaporated.
 
 ---
 
